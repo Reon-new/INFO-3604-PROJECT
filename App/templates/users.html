@@ -1,55 +1,62 @@
 {% extends "layout.html" %}
-{% block title %}App Users{% endblock %}
-{% block page %}App Users{% endblock %}
+{% block title %}Participants Directory - UWI Principal's Research Awards & Festival{% endblock %}
+{% block page %}Participants Directory{% endblock %}
 
 {{ super() }}
 
 {% block content %}
-    <div class="row">
-        <p>
-            This is table is renderd on the Server. Flask gets the data from the database and uses jinja templates to dyanmically render this page when a request is sent to <a href="/users">/users</a>.
+    <div class="mb-5">
+        <h1>Participants Directory</h1>
+        <p class="lead">
+            Access the comprehensive participant database for the UWI Principal's Research Awards & Festival. Search and connect with researchers, scholars, and attendees from across the university community.
         </p>
     </div>
 
-    <div class="row">
-      <form class="col s12" method="POST" action="/users">
-        
-        <div class="row">
-          <div class="input-field col s6">
-            <input placeholder="Username" name="username" type="text" class="validate">
-            <label for="username">Username</label>
-          </div>
-          <div class="input-field col s6">
-            <input placeholder="password" name="password" type="password" class="validate">
-            <label for="password">Password</label>
-          </div>
+    <div class="card mb-5">
+        <div class="card-header">
+            <h5 class="mb-0">Register New Participant</h5>
         </div>
-      
-        <div class="row">
-          <div class="input-field col s12">
-            <button class="btn waves-effect waves-light right purple" type="submit" name="action">Submit</button>
-          </div>
-        </div> 
-
-      </form>
+        <div class="card-body">
+            <form method="POST" action="/users">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="username" class="form-label">Username</label>
+                        <input id="username" class="form-control" placeholder="Enter username" name="username" type="text" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input id="password" class="form-control" placeholder="Enter password" name="password" type="password" required>
+                    </div>
+                </div>
+                <button type="submit" name="action" class="btn btn-dark">Register Participant</button>
+            </form>
+        </div>
     </div>
 
-    <div class="row">
-      <table>
-        <thead>
-          <tr>
-            <th>Id</th><th>Username</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for user in users %}
-            <tr>
-                <td>{{user.id}}</td>
-                <td>{{user.username}}</td>
-            </tr>
-          {% endfor %}
-        <tbody>
-      </table>
+    <div class="card">
+        <div class="card-header">
+            <h5 class="mb-0">Registered Participants</h5>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>ID</th>
+                            <th>Username</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in users %}
+                            <tr>
+                                <td>{{user.id}}</td>
+                                <td>{{user.username}}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 
 {% endblock %}

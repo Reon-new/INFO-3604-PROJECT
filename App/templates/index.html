@@ -1,13 +1,52 @@
 {% extends "layout.html" %}
-{% block title %}Flask MVC App{% endblock %}
-{% block page %}Flask MVC App{% endblock %}
+{% block title %}UWI Principal's Research Awards & Festival{% endblock %}
+{% block page %}UWI Principal's Research Awards & Festival{% endblock %}
 
 {{ super() }}
 
 {% block content %}
-    <h1>Flask MVC</h1>
-    {% if is_authenticated %}
-        <p> Welcome {{current_user.username}} </p>
-    {% endif %}
-    <p>This is a boileplate flask application which follows the MVC pattern for structuring the project.</p>
+    <div class="mb-5">
+        <h1>Welcome to UWI Principal's Research Awards & Festival</h1>
+        {% if is_authenticated %}
+            <p class="accent">Welcome back, <strong>{{current_user.username}}</strong>!</p>
+        {% endif %}
+        <p class="lead">An annual celebration of academic excellence showcasing cutting-edge research, innovative ideas, and scholarly contributions from the University of the West Indies community. This platform facilitates networking, knowledge exchange, and recognition of outstanding research endeavors across diverse disciplines.</p>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-6 mb-4">
+            <div class="card h-100">
+                <div class="card-header">
+                    <h5>Event Overview</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled">
+                        <li><strong>Participant Registration:</strong> Secure access for research contributors and attendees</li>
+                        <li><strong>Research Directory:</strong> Browse and explore presentations and poster sessions</li>
+                        <li><strong>Schedule & Venues:</strong> Stay informed about keynote presentations, concurrent sessions, and award ceremonies</li>
+                        <li><strong>Networking Hub:</strong> Connect with researchers and scholars across disciplines</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6 mb-4">
+            <div class="card h-100">
+                <div class="card-header">
+                    <h5>Getting Started</h5>
+                </div>
+                <div class="card-body">
+                    <p>Explore the platform using the navigation menu:</p>
+                    <ul class="list-unstyled">
+                        <li><a href="/users">Participants Directory</a> - View registered attendees and researchers</li>
+                        <li><a href="/static/users">User Database</a> - Access comprehensive participant information</li>
+                        {% if is_authenticated %}
+                            <li><a href="/identify">My Profile</a> - Manage your personal information</li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
 {% endblock %}
