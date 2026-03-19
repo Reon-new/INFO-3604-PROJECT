@@ -1,4 +1,8 @@
 from flask import Blueprint, render_template
+from App.models import User, Role
+from App.database import db
+from flask import jsonify
+from App.models import Attendance
 
 from App.database import db
 from App.models import (
@@ -372,13 +376,25 @@ def usher_check_in():
 
 @role_views.route('/role/usher/search-attendees', methods=['GET'])
 def usher_search_attendees():
-    return _render_role_page(
-        'usher_search_attendees.html',
-        'Usher - Search Attendees',
-        'Usher',
-        'Search Attendees',
+    attendees = db.session.execute(
+        db.select(User).filter_by(role=Role.Attendee)
+    ).scalars().all()
+
+    return render_template(
+        'usher/usher_search_attendees.html',
+        title='Usher - Search Attendees',
+        attendees=attendees
     )
 
+@role_views.route("/role/usher/checkin/<int:user_id>", methods=["POST"])
+def toggle_checkin(user_id):
+    user = db.session.get(User, user_id)
+    if not user:
+        return jsonify({"message": "User not found"}), 404
+    
+    user.checked_in = not user.checked_in
+    db.session.commit()
+    return jsonify({"checked_in": user.checked_in})
 
 @role_views.route('/role/usher/attendance-report', methods=['GET'])
 def usher_attendance_report():
@@ -388,3 +404,4 @@ def usher_attendance_report():
         'Usher',
         'Attendance Report',
     )
+
