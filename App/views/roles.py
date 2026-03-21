@@ -152,12 +152,42 @@ def judge_results():
 # Attendee
 @role_views.route('/role/attendee/schedule-agenda', methods=['GET'])
 def attendee_schedule_agenda():
-    return _render_role_page(
-        'attendee_schedule_agenda.html',
-        'Attendee - Schedule & Agenda',
-        'Attendee',
-        'Schedule & Agenda',
-    )
+    from App.models import Event
+
+    events_db = Event.query.order_by(Event.date, Event.time).all()
+
+    events = []
+
+    for e in events_db:
+        events.append({
+            "id": e.id,
+            "title": e.title,
+            "date": e.date.strftime("%Y-%m-%d") if e.date else "TBD",
+            "time": e.time.strftime("%I:%M %p") if e.time else "TBD",
+            "presenter": "N/A",  # update later if linked to presentation
+            "location": e.location,
+            "rsvp": False  # update later with real RSVP system
+        })
+
+    return render_template('attendee/attendee_schedule_agenda.html', events=events)
+
+from flask import jsonify, request
+from App import db
+from App.models import Event  # Make sure Event is imported
+
+@role_views.route('/role/attendee/rsvp/<int:event_id>', methods=['POST'])
+def rsvp_event(event_id):
+    event = Event.query.get(event_id)
+    if not event:
+        return jsonify({"error": "Event not found"}), 404
+
+    event.rsvp = not event.rsvp
+    db.session.commit()
+
+    return jsonify({
+        "event_id": event.id,
+        "rsvp": event.rsvp
+    })
 
 
 @role_views.route('/role/attendee/my-schedule', methods=['GET'])
@@ -170,20 +200,20 @@ def attendee_my_schedule():
     )
 
 
-@role_views.route('/role/attendee/presentations', methods=['GET'])
-def attendee_presentations():
+@role_views.route('/role/attendee/event-digest', methods=['GET'])
+def attendee_event_digest():
     return _render_role_page(
-        'attendee_presentations.html',
-        'Attendee - Presentations',
+        'attendee/attendee_event_digest.html',
+        'Attendee - Event Digest',
         'Attendee',
-        'Presentations',
+        'Event Digest',
     )
 
 
 @role_views.route('/role/attendee/my-qr-code', methods=['GET'])
 def attendee_my_qr_code():
     return _render_role_page(
-        'attendee_my_qr_code.html',
+        'attendee/attendee_my_qr_code.html',
         'Attendee - My QR Code',
         'Attendee',
         'My QR Code',
@@ -193,7 +223,7 @@ def attendee_my_qr_code():
 @role_views.route('/role/attendee/qa-feedback', methods=['GET'])
 def attendee_qa_feedback():
     return _render_role_page(
-        'attendee_qa_feedback.html',
+        'attendee/attendee_qa_feedback.html',
         'Attendee - Q&A & Feedback',
         'Attendee',
         'Q&A & Feedback',
