@@ -5,11 +5,10 @@ from App.database import db
 
 
 class ReviewDecision(Enum):
-    ApproveOral = "Approve for Oral"
-    ApprovePoster = "Approve for Poster"
-    RequestRevisions = "Request for Revisions"
+    ApproveOral = "ApproveOral"
+    RequestChanges = "RequestChanges"
+    ApprovePoster = "ApprovePoster"
     Rejected = "Rejected"
-    InReview = "In Review"
 
 
 class Review(db.Model):
