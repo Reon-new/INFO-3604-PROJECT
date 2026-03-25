@@ -1,3 +1,4 @@
+<<<<<<<<< Temporary merge branch 1
 from flask import Blueprint, abort, render_template, request
 from flask_jwt_extended import current_user
 
